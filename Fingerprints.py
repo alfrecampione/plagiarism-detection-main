@@ -10,40 +10,17 @@ def tokenize(text):
     doc = nlp(text)
     return [token.text for token in doc if not token.is_stop and not token.is_punct]
 
-#Elimina los caracteres especiales y los signos de puntuacion utilizando spacy
-def remove_noise(tokenized_docs):
-  return [[token for token in doc if token.is_alpha] for doc in tokenized_docs]
-
-#Elimina las palabras que no aportan informacion relevante utilizando spacy
-def remove_stopwords(tokenized_docs):
-  stopwords = spacy.lang.en.stop_words.STOP_WORDS
-  return [
-      [token for token in doc if token.text not in stopwords] for doc in tokenized_docs
-  ]
-
-def Fingerprints(docA: list[str], docB: list[str]) -> list:
-
+def Fingerprints(textA: list[str], textB: list[str]) -> list:
     #Creamos las listas donde se guardaran los textos tokenizados.
     tokenizeA = []
     tokenizeB = []
 
     #Tokenizamos cada parrafo del texto y lo guardamos en la lista.
-    for paragraph in docA:
+    for paragraph in textA:
         tokenizeA.append(tokenize(paragraph))
 
-    for paragraph in docB:
+    for paragraph in textB:
         tokenizeB.append(tokenize(paragraph))
-
-    #Creamos una lista donde se guardaran los textos luego de que se le eliminen el ruido y las stopwords.
-    clean_text_A = []
-    clean_text_B = []
-
-    #Eliminamos el ruido y las stopwords de ambos texto y los guardamos en sus respectivas listas.
-    for paragraph in tokenizeA:
-        clean_text_A.append(remove_stopwords(remove_noise(paragraph)))
-    
-    for paragraph in tokenizeB:
-        clean_text_B.append(remove_stopwords(remove_noise(paragraph)))
 
     #Convierte un string a binario y utiliza hashlib para hashearlo con el formato MD5 y devuelve el hash en hexadecimal.
     def do_hash(text):
@@ -54,11 +31,11 @@ def Fingerprints(docA: list[str], docB: list[str]) -> list:
     hash_docB = []
 
     #Hasheamos cada palabra del parrafo y unimos esos hash para crear el hash de cada parrafo.
-    for paragraph in clean_text_A:
+    for paragraph in tokenizeA:
         hash_docA.append("".join([do_hash(word) for word in paragraph]))
         #hash_docA.append(do_hash(paragraph))
 
-    for paragraph in clean_text_B:
+    for paragraph in tokenizeB:
         hash_docB.append("".join([do_hash(word) for word in paragraph]))
         #hash_docB.append(do_hash(paragraph))
 

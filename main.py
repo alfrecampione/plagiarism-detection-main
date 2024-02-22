@@ -31,15 +31,12 @@ def plagiarism_rate(text1: str, text2: str):
 
     combined_rate = []
 
-    # This is in case the documents are not scientific papers with citations
-    threshold = COMBINED_THRESHOLD if cbpd_rate > 0.01 else (COMBINED_THRESHOLD - CBPD_THRESHOLD)
-
     found_over_threshold = False
 
     for i in range(len(bow_rate)):
         rate = bow_rate[i] * BOW_WEIGHT + fgrprint_rate[i] * FINGERPRINT_WEIGHT + cbpd_rate * CBPD_WEIGHT
 
-        if rate > threshold:
+        if rate > COMBINED_THRESHOLD:
             found_over_threshold = True
     
         combined_rate.append(rate)
@@ -51,7 +48,7 @@ def plagiarism_rate(text1: str, text2: str):
             print(f"No se encontró plagio.\nBoW: {bow_rate}\nFingerprint: {fgrprint_rate}\nCitation-based: {cbpd_rate}")
     else:
         for i in range(len(combined_rate)):
-            if combined_rate[i] > threshold:
+            if combined_rate[i] > COMBINED_THRESHOLD:
                 print(f"Se encontró plagio en el párrafo {i + 1} con valor: {combined_rate[i]}")
 
 
