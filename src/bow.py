@@ -25,7 +25,7 @@ def cosine_similarity(v1: list[float], v2: list[float]):
     norm1 = sqrt(sum(map(lambda x: x*x, v1)))
     norm2 = sqrt(sum(map(lambda x: x*x, v2)))
     
-    return dot_product / (norm1 * norm2)\
+    return dot_product / (norm1 * norm2)
 
 
 # retrieves a list of the unique terms in a text.

@@ -1,6 +1,9 @@
 import hashlib
 import Levenshtein
 import spacy
+from math import sqrt
+
+from bow import bow
 
 #Cargar el modelo de procesamiento de lenguaje que utilizara spacy.
 nlp = spacy.load("en_core_web_sm")
@@ -9,6 +12,16 @@ nlp = spacy.load("en_core_web_sm")
 def tokenize(text):
     doc = nlp(text)
     return [token.text for token in doc if not token.is_stop and not token.is_punct]
+
+
+# returns how similar two vectors are in terms of the angle between them
+def cosine_similarity(v1: list[float], v2: list[float]):
+    dot_product = sum(map(lambda x, y: x * y, v1, v2))
+    norm1 = sqrt(sum(map(lambda x: x*x, v1)))
+    norm2 = sqrt(sum(map(lambda x: x*x, v2)))
+    
+    return dot_product / (norm1 * norm2)
+
 
 def Fingerprints(textA: list[str], textB: list[str]) -> list:
     #Creamos las listas donde se guardaran los textos tokenizados.
@@ -32,11 +45,11 @@ def Fingerprints(textA: list[str], textB: list[str]) -> list:
 
     #Hasheamos cada palabra del parrafo y unimos esos hash para crear el hash de cada parrafo.
     for paragraph in tokenizeA:
-        hash_docA.append("".join([do_hash(word) for word in paragraph]))
+        hash_docA.append(" ".join([do_hash(word) for word in paragraph]))
         #hash_docA.append(do_hash(paragraph))
 
     for paragraph in tokenizeB:
-        hash_docB.append("".join([do_hash(word) for word in paragraph]))
+        hash_docB.append(" ".join([do_hash(word) for word in paragraph]))
         #hash_docB.append(do_hash(paragraph))
 
     #Creamos una lista donde para cada parrafo de A guardamos su radio de plagio con los parrafos de B.
@@ -56,5 +69,8 @@ def Fingerprints(textA: list[str], textB: list[str]) -> list:
     for pr in plagiarism_rate:
         out_list.append(max(pr))
 
+    textA = "\n".join(hash_docA)
+    textB = "\n".join(hash_docB)
+
     #Devolvemos la lista de salida.
-    return out_list
+    return bow(textA, textB, hash_docA, hash_docB)

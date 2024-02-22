@@ -34,7 +34,7 @@ def plagiarism_rate(text1: str, text2: str):
     found_over_threshold = False
 
     # The threshold is reduced if no citations are found
-    threshold = COMBINED_THRESHOLD if cbpd_rate > 0.01 else (COMBINED_THRESHOLD - CBPD_THRESHOLD ** 2)
+    threshold = COMBINED_THRESHOLD if cbpd_rate > 0.01 else (COMBINED_THRESHOLD - CBPD_THRESHOLD)
 
     for i in range(len(bow_rate)):
         rate = bow_rate[i] * BOW_WEIGHT + fgrprint_rate[i] * FINGERPRINT_WEIGHT + cbpd_rate * CBPD_WEIGHT
@@ -91,4 +91,4 @@ with open("text3.txt") as f:
 with open("text4.txt") as f:
     txt4 = f.read()
 
-plagiarism_rate(txt1, txt2)
+plagiarism_rate(txt3, txt4)
