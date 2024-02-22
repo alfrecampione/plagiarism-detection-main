@@ -80,11 +80,14 @@ def get_paragraphs(text: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    text1, text2 = argv[1], argv[2]
-    with open(text1) as f:
-        txt1 = f.read()
-    
-    with open(text2) as f:
-        txt2 = f.read()
+    if len(argv) < 3:
+        print("Pase los textos como argumentos del programa.")
+    else:
+        text1, text2 = argv[1], argv[2]
+        with open(text1) as f:
+            txt1 = f.read()
+        
+        with open(text2) as f:
+            txt2 = f.read()
 
-    plagiarism_rate(txt1, txt2)
+        plagiarism_rate(txt1, txt2)
