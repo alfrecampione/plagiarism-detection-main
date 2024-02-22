@@ -1,8 +1,8 @@
 import hashlib
 import spacy
+from bow import bow as vector_similarity
 from math import sqrt
 
-from bow import bow
 
 # Cargar el modelo de procesamiento de lenguaje que utilizara spacy.
 nlp = spacy.load("en_core_web_sm")
@@ -47,4 +47,4 @@ def Fingerprints(textA: list[str], textB: list[str]) -> list:
     textB = "\n".join(hash_docB)
 
     # Devolvemos la lista de salida con la distancia vectorial entre los hash
-    return bow(textA, textB, hash_docA, hash_docB)
+    return vector_similarity(textA, textB, hash_docA, hash_docB)
