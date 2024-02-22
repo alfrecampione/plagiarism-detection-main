@@ -1,7 +1,7 @@
 from bow import bow
 from Fingerprints import Fingerprints
 from CbPD import detect_plagiarism
-
+from sys import argv
 
 CBPD_THRESHOLD = 0.5
 COMBINED_THRESHOLD = 1.2
@@ -79,16 +79,12 @@ def get_paragraphs(text: str) -> list[str]:
     return pgphs
 
 
-with open("text1.txt") as f:
-    txt1 = f.read()
-
-with open("text2.txt") as f:
-    txt2 = f.read()
+if __name__ == "__main__":
+    text1, text2 = argv[1], argv[2]
+    with open(text1) as f:
+        txt1 = f.read()
     
-with open("text3.txt") as f:
-    txt3 = f.read()
-    
-with open("text4.txt") as f:
-    txt4 = f.read()
+    with open(text2) as f:
+        txt2 = f.read()
 
-plagiarism_rate(txt3, txt4)
+    plagiarism_rate(txt1, txt2)
